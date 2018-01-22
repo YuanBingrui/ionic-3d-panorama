@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import * as THREE from 'three';
-import { CanvasRenderer } from "./CanvasRenderer";
+
 
 @Component({
   selector: 'threed-renderer',
@@ -18,203 +18,153 @@ export class ThreedRendererComponent {
   }
 
   ThreeRender = function(THREE, cubeImg: Array<string>) {
-  	var camera, scene, renderer;
+		var camera, scene, renderer;
+		var geometry, material, mesh;
+		var target = new THREE.Vector3();
 
-		var texture_placeholder,
-			isUserInteracting = false,
-			onMouseDownMouseX = 0, onMouseDownMouseY = 0,
-			lon = -90, onMouseDownLon = 0,
-			lat = 0, onMouseDownLat = 0,
+		var lon = -90, lat = 0,
 			phi = 0, theta = 0,
-			target = new THREE.Vector3(),
-			boxWidth, boxHeight;
+			touchX, touchY, isUserInteracting = false,
+			boxWidth, boxHeight, container;;
 
 		init();
 		animate();
 
 		function init() {
 
-			var container, mesh;
-
 			container = document.getElementById( 'threeDshowBox' );
 
 			boxWidth = window.innerWidth;
-			boxHeight = window.innerHeight - 100;
+			boxHeight = window.innerHeight - 200;
 
-			camera = new THREE.PerspectiveCamera( 75, boxWidth / boxHeight, 1, 1100 );
+			camera = new THREE.PerspectiveCamera( 260, boxWidth / boxHeight, 1, 1000 );
 
 			scene = new THREE.Scene();
 
-			texture_placeholder = document.createElement( 'canvas' );
-			texture_placeholder.width = 128;
-			texture_placeholder.height = 128;
+			geometry = new THREE.SphereBufferGeometry( 500, 60, 40 );
+			geometry.scale( -1, 1, 1 );
 
-			var context = texture_placeholder.getContext( '2d' );
-			context.fillStyle = 'rgb( 200, 200, 200 )';
-			context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
+			var loader = new THREE.CubeTextureLoader();
 
-			var materials = [];
+			var textureCube = loader.load(cubeImg);
 
-			for (let i = 0; i < cubeImg.length; i++) {
-				materials.push(loadTexture(cubeImg[i]));
-			}
+			material = new THREE.MeshBasicMaterial( { envMap: textureCube } );
 
-			var geometry = new THREE.BoxGeometry( 300, 300, 300, 7, 7, 7 );
-			geometry.scale( - 1, 1, 1 );
+			mesh = new THREE.Mesh( geometry, material );
 
-			mesh = new THREE.Mesh( geometry, materials );
 			scene.add( mesh );
 
-			for ( var i = 0, l = mesh.geometry.vertices.length; i < l; i ++ ) {
-
-				var vertex = mesh.geometry.vertices[ i ];
-
-				vertex.normalize();
-				vertex.multiplyScalar( 550 );
-
-			}
-
-			renderer = new CanvasRenderer();
+			renderer = new THREE.WebGLRenderer();
 			renderer.setPixelRatio( window.devicePixelRatio );
-			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setSize( boxWidth, boxHeight );
 			container.appendChild( renderer.domElement );
 
-			document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-			document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-			document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-			document.addEventListener( 'wheel', onDocumentMouseWheel, false );
+			container.addEventListener( 'mousedown', onDocumentMouseDown, false );
+    	container.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
 
-			document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-			document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+    	container.addEventListener( 'touchstart', onDocumentTouchStart, false );
+    	container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
-			//
+    	window.addEventListener( 'resize', onWindowResize, false );
+  	}
+  	function animate() {
 
-			window.addEventListener( 'resize', onWindowResize, false );
+    	requestAnimationFrame(animate);
 
-		}
+    	if (isUserInteracting) {
+				lon += 0.1;
+			}
 
-		function loadTexture( path ) {
+    	lat = Math.max( - 85, Math.min( 85, lat ) );
+    	phi = THREE.Math.degToRad( 90 - lat );
+    	theta = THREE.Math.degToRad( lon );
 
-			var texture = new THREE.Texture( texture_placeholder );
-			var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+    	target.x = 500 * Math.sin( phi ) * Math.cos( theta );
+    	target.y = 500 * Math.cos( phi );
+    	target.z = 500 * Math.sin( phi ) * Math.sin( theta );
 
-			var image = new Image();
-			image.onload = function () {
-
-				texture.image = this;
-				texture.needsUpdate = true;
-
-			};
-			image.src = path;
-
-			return material;
+    	camera.lookAt( target );
+    	renderer.render( scene, camera );
 
 		}
 
 		function onWindowResize() {
 
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+    	camera.aspect = window.innerWidth / window.innerHeight;
+    	camera.updateProjectionMatrix();
 
-			renderer.setSize( window.innerWidth, window.innerHeight );
+    	renderer.setSize( window.innerWidth, window.innerHeight );
 
 		}
 
 		function onDocumentMouseDown( event ) {
 
-			event.preventDefault();
+    	event.preventDefault();
+    	console.log(isUserInteracting);
 
-			isUserInteracting = true;
+    	if(isUserInteracting){
+    		isUserInteracting = false;
+    	}else{
+    		isUserInteracting = true;
+   		}
 
-			onMouseDownMouseX = event.clientX;
-			onMouseDownMouseY = event.clientY;
-
-			onMouseDownLon = lon;
-			onMouseDownLat = lat;
+    	container.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    	container.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 		}
 
 		function onDocumentMouseMove( event ) {
 
-			if ( isUserInteracting === true ) {
+    	var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    	var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-				lon = ( onMouseDownMouseX - event.clientX ) * 0.1 + onMouseDownLon;
-				lat = ( event.clientY - onMouseDownMouseY ) * 0.1 + onMouseDownLat;
+    	lon -= movementX * 0.1;
+    	lat += movementY * 0.1;
 
-			}
 		}
 
 		function onDocumentMouseUp( event ) {
 
-			isUserInteracting = false;
+    	container.removeEventListener( 'mousemove', onDocumentMouseMove );
+    	container.removeEventListener( 'mouseup', onDocumentMouseUp );
 
 		}
 
 		function onDocumentMouseWheel( event ) {
-
-			var fov = camera.fov + event.deltaY * 0.05;
-
-			camera.fov = THREE.Math.clamp( fov, 10, 75 );
-
-			camera.updateProjectionMatrix();
-
+			if(camera.fov >= 260 && camera.fov <= 350){
+				camera.fov += event.deltaY * 0.05;
+				if(camera.fov === 255) {
+					camera.fov = 260;
+				}
+				if(camera.fov === 355) {
+					camera.fov = 350;
+				}
+				camera.updateProjectionMatrix();
+			}
 		}
 
 		function onDocumentTouchStart( event ) {
 
-			if ( event.touches.length == 1 ) {
+    	event.preventDefault();
 
-				event.preventDefault();
+    	var touch = event.touches[ 0 ];
 
-				onMouseDownMouseX = event.touches[ 0 ].pageX;
-				onMouseDownMouseY = event.touches[ 0 ].pageY;
+    	touchX = touch.screenX;
+    	touchY = touch.screenY;
 
-				onMouseDownLon = lon;
-				onMouseDownLat = lat;
-
-			}
 		}
 
 		function onDocumentTouchMove( event ) {
 
-			if ( event.touches.length == 1 ) {
+    	event.preventDefault();
 
-				event.preventDefault();
+    	var touch = event.touches[ 0 ];
 
-				lon = ( onMouseDownMouseX - event.touches[0].pageX ) * 0.1 + onMouseDownLon;
-				lat = ( event.touches[0].pageY - onMouseDownMouseY ) * 0.1 + onMouseDownLat;
+    	lon -= ( touch.screenX - touchX ) * 0.1;
+    	lat += ( touch.screenY - touchY ) * 0.1;
 
-			}
-
-		}
-
-		function animate() {
-
-			requestAnimationFrame( animate );
-			update();
-
-		}
-
-		function update() {
-
-			if ( isUserInteracting === false ) {
-
-				lon += 0.1;
-
-			}
-
-			lat = Math.max( - 85, Math.min( 85, lat ) );
-			phi = THREE.Math.degToRad( 90 - lat );
-			theta = THREE.Math.degToRad( lon );
-
-			target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-			target.y = 500 * Math.cos( phi );
-			target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-			camera.position.copy( target ).negate();
-			camera.lookAt( target );
-
-			renderer.render( scene, camera );
+    	touchX = touch.screenX;
+    	touchY = touch.screenY;
 
 		}
 	}

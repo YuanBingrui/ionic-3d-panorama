@@ -4,7 +4,26 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content>
-
+	<div class="showBox">
+		<div class="compBox">
+			<div class="titleBox">画布</div>
+			<picture-composite [puzzleImg]="puzzleImg" #pictureCom></picture-composite>
+		</div>
+		<div *ngIf="imgUrl" class="compBox">
+			<div class="titleBox">合成图</div>
+			<div class="imgBox">
+				<img src="{{imgUrl}}">
+			</div>	
+		</div>
+	</div>
+	<div class="puzzleBox">
+		<div *ngFor="let oneImg of puzzleImg" class="puzzleImgBox">
+			<img src="{{oneImg}}" >
+		</div>
+	</div>
+	<div class="handleBtn">
+		<button ion-button round outline (click)="saveImgInfo()">图片合成</button>
+		<button ion-button round outline (click)="downloadImg()">保存图片</button>
+	</div>
 </ion-content>

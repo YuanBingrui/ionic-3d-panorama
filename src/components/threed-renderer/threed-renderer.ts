@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import * as THREE from 'three';
-
+import * as Stats from 'three/examples/js/libs/stats.min.js';
 
 @Component({
   selector: 'threed-renderer',
@@ -25,7 +25,7 @@ export class ThreedRendererComponent {
 		var lon = -90, lat = 0,
 			phi = 0, theta = 0,
 			touchX, touchY, isUserInteracting = false,
-			boxWidth, boxHeight, container;;
+			boxWidth, boxHeight, container, stats;
 
 		init();
 		animate();
@@ -59,6 +59,13 @@ export class ThreedRendererComponent {
 			renderer.setSize( boxWidth, boxHeight );
 			container.appendChild( renderer.domElement );
 
+			stats = new Stats();
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.width = '100%';
+			stats.domElement.style.height = '50px';
+			
+      document.getElementById('statsBox').appendChild(stats.domElement);
+
 			container.addEventListener( 'mousedown', onDocumentMouseDown, false );
     	container.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
 
@@ -85,6 +92,8 @@ export class ThreedRendererComponent {
 
     	camera.lookAt( target );
     	renderer.render( scene, camera );
+
+    	stats.update();
 
 		}
 

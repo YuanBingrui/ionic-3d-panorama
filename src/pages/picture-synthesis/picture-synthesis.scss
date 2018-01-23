@@ -1,3 +1,46 @@
 page-picture-synthesis {
-
+	.showBox{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		margin: 30px 0;
+	}
+	.compBox{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: space-between;
+	}
+	.titleBox{
+		font-size: 23px;
+		text-align: center;
+		font-weight:bold;
+		margin-bottom: 7px;
+	}
+	.imgBox img {
+		width: 150px;
+		height: 300px;
+	}
+	.puzzleBox{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	}
+	.puzzleBox img{
+		width: 50px;
+		height: 100px;
+		margin: 2px;
+	}
+	.puzzleImgBox{
+		border: 1px rgba(204, 204, 204,1) solid;
+	}
+	.handleBtn{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		margin: 40px 0;
+	}
 }

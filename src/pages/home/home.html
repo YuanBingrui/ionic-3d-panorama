@@ -1,10 +1,20 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>首页</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-	<button ion-button round outline>图片合成</button>
-  <button ion-button round outline>3D全景</button>
+	<div class="puzzleImgBox">
+		<div *ngFor="let oneImg of puzzleImg" class="imgPuzzleSubBox">
+			<img src="{{oneImg}}">
+		</div>
+	</div>
+	<button ion-button block outline (click)="gotoPictureSynthesis()">图片合成</button>
+	<div class="threeDBox">
+		<div *ngFor="let onecImg of cubeImg" class="imgthreeDSubBox">
+			<img src="{{onecImg}}">
+		</div>
+	</div>
+  <button ion-button block outline (click)="gotoThreedPanorama()">3D全景</button>
 </ion-content>

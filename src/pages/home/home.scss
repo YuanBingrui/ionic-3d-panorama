@@ -1,3 +1,77 @@
 page-home {
-
+	.puzzleImgBox{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		flex-wrap: warp;
+		margin: 30px 0;
+	}
+	.puzzleImgBox img{
+		width: 50px;
+		height: 100px;
+		margin: 2px;
+	}
+	.imgPuzzleSubBox:nth-child(1):before {
+		content: '轿厢';
+	}
+	.imgPuzzleSubBox:nth-child(2):before {
+		content: '轿顶';
+	}
+	.imgPuzzleSubBox:nth-child(3):before {
+		content: '轿底';
+	}
+	.imgPuzzleSubBox:nth-child(4):before {
+		content: '召唤盒';
+	}
+	.imgPuzzleSubBox {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: space-around;
+		border: 1px rgba(204, 204, 204,1) solid;
+		margin: 4px;
+		text-align: center;
+	}
+	.threeDBox{
+		display: flex;
+  	flex-wrap: wrap;
+  	justify-content: space-around;
+  	align-content: space-between;
+  	margin: 30px 0;
+	}
+	.threeDBox img{
+		width: 100px;
+		height: 100px;
+		border-bottom-left-radius: 8px;
+  	border-bottom-right-radius: 8px;
+	}
+	.imgthreeDSubBox {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: space-around;
+		border: 1px rgba(204, 204, 204,1) solid;
+		border-radius: 8px;
+		margin: 4px;
+		text-align: center;
+	}
+	.imgthreeDSubBox:nth-child(1):before {
+		content: '左';
+	}
+	.imgthreeDSubBox:nth-child(2):before {
+		content: '右';
+	}
+	.imgthreeDSubBox:nth-child(3):before {
+		content: '上';
+	}
+	.imgthreeDSubBox:nth-child(4):before {
+		content: '下';
+	}
+	.imgthreeDSubBox:nth-child(5):before {
+		content: '前';
+	}
+	.imgthreeDSubBox:nth-child(6):before {
+		content: '后';
+	}
 }

@@ -33,9 +33,8 @@ export class ThreedRendererComponent {
 		function init() {
 
 			container = document.getElementById( 'threeDshowBox' );
-
-			boxWidth = window.innerWidth;
-			boxHeight = window.innerHeight - 200;
+			boxWidth = document.getElementsByTagName( 'threed-renderer' )[0].parentElement.clientWidth;
+			boxHeight = document.getElementsByTagName( 'threed-renderer' )[0].parentElement.clientHeight - 19;
 
 			camera = new THREE.PerspectiveCamera( 260, boxWidth / boxHeight, 1, 1000 );
 
@@ -72,7 +71,7 @@ export class ThreedRendererComponent {
     	container.addEventListener( 'touchstart', onDocumentTouchStart, false );
     	container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
-    	window.addEventListener( 'resize', onWindowResize, false );
+    	//window.addEventListener( 'resize', onWindowResize, false );
   	}
   	function animate() {
 
@@ -97,14 +96,14 @@ export class ThreedRendererComponent {
 
 		}
 
-		function onWindowResize() {
+		// function onWindowResize() {
 
-    	camera.aspect = window.innerWidth / window.innerHeight;
-    	camera.updateProjectionMatrix();
+  //   	camera.aspect = window.innerWidth / window.innerHeight;
+  //   	camera.updateProjectionMatrix();
 
-    	renderer.setSize( window.innerWidth, window.innerHeight );
+  //   	renderer.setSize( window.innerWidth, window.innerHeight );
 
-		}
+		// }
 
 		function onDocumentMouseDown( event ) {
 

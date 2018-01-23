@@ -1,24 +1,25 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-picture-synthesis',
   templateUrl: 'picture-synthesis.html',
 })
 export class PictureSynthesisPage {
-	@ViewChild('pictureCom') pictureCom: ElementRef;
+	@ViewChild('pictureCom') pictureCom;
 
 	imgUrl: string;
-	puzzleImg: Array<string> = [
-		'./assets/puzzle/car.png', './assets/puzzle/ceiling.png',
-    './assets/puzzle/floor.png', './assets/puzzle/operating.png'
-  ];
+	puzzleImg: Array<string> = [];
   constructor(
   	public navCtrl: NavController,
-  	public alertCtrl: AlertController
-  ) {}
+  	public alertCtrl: AlertController,
+    public navParams: NavParams
+  ) {
+    this.puzzleImg = this.navParams.data;
+  }
 
   ionViewWillEnter() {
+    console.log(this.puzzleImg);
     console.log('ionViewDidLoad PictureSynthesisPage');
   }
 

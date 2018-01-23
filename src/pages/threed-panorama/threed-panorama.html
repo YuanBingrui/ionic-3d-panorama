@@ -5,6 +5,13 @@
 </ion-header>
 
 <ion-content>
-	<threed-renderer [cubeImg]="cubeImg"></threed-renderer>
+	<div id="threedRenderBox">
+		<threed-renderer [cubeImg]="cubeImg"></threed-renderer>
+	</div>
+	<div class="threeDBox">
+		<div *ngFor="let onecImg of cubeImg" class="imgthreeDSubBox">
+			<img src="{{onecImg}}">
+		</div>
+	</div>
 	<div id="statsBox"></div>
 </ion-content>

@@ -6,4 +6,61 @@ page-threed-panorama {
 		height:50px;
 		background-color: red;
 	}
+	#threedRenderBox{
+		width: 95%;
+		height: 300px;
+		font-size: 16px;
+		border: 1px rgba(204, 204, 204,1) solid;
+		margin: 4px auto;
+		text-align: center;
+		border-radius: 8px;
+	}
+	#threedRenderBox canvas{
+		border-bottom-left-radius: 8px;
+  		border-bottom-right-radius: 8px;
+	}
+	#threedRenderBox:before{
+		content: '3D全景';
+	}
+	.threeDBox{
+		display: flex;
+  		flex-wrap: wrap;
+  		justify-content: space-around;
+  		align-content: space-between;
+  		margin: 30px 0;
+	}
+	.threeDBox img{
+		width: 100px;
+		height: 100px;
+		border-bottom-left-radius: 8px;
+  		border-bottom-right-radius: 8px;
+	}
+	.imgthreeDSubBox {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: space-around;
+		border: 1px rgba(204, 204, 204,1) solid;
+		border-radius: 8px;
+		margin: 4px;
+		text-align: center;
+	}
+	.imgthreeDSubBox:nth-child(1):before {
+		content: '左';
+	}
+	.imgthreeDSubBox:nth-child(2):before {
+		content: '右';
+	}
+	.imgthreeDSubBox:nth-child(3):before {
+		content: '上';
+	}
+	.imgthreeDSubBox:nth-child(4):before {
+		content: '下';
+	}
+	.imgthreeDSubBox:nth-child(5):before {
+		content: '前';
+	}
+	.imgthreeDSubBox:nth-child(6):before {
+		content: '后';
+	}
 }

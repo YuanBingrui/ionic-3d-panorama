@@ -29,7 +29,7 @@ page-home {
 		flex-direction: column;
 		justify-content: center;
 		align-content: space-around;
-		border: 1px rgba(204, 204, 204,1) solid;
+		border: 1px rgba(204, 204, 204, 1) solid;
 		margin: 4px;
 		text-align: center;
 	}
@@ -73,5 +73,12 @@ page-home {
 	}
 	.imgthreeDSubBox:nth-child(6):before {
 		content: '后';
+	}
+	.handleBtn{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		margin: 40px 0;
 	}
 }

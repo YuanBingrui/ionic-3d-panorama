@@ -6,15 +6,22 @@
 
 <ion-content>
 	<div class="puzzleImgBox">
-		<div *ngFor="let oneImg of puzzleImg" class="imgPuzzleSubBox">
+		<div *ngFor="let oneImg of puzzleImg;let i = index;" class="imgPuzzleSubBox" (click)="selectSingleImg('puzzle', i)">
 			<img src="{{oneImg}}">
 		</div>
 	</div>
-	<button ion-button block outline (click)="gotoPictureSynthesis()">图片合成</button>
+	<div class="handleBtn">
+		<button ion-button round outline (click)="selectMultipleImgs('puzzle')">图片+</button>
+		<button ion-button round outline (click)="gotoPictureSynthesis()">图片合成</button>
+	</div>
 	<div class="threeDBox">
-		<div *ngFor="let onecImg of cubeImg" class="imgthreeDSubBox">
+		<div *ngFor="let onecImg of cubeImg;let i = index;" class="imgthreeDSubBox" (click)="selectSingleImg('threeD', i)">
 			<img src="{{onecImg}}">
 		</div>
 	</div>
-  <button ion-button block outline (click)="gotoThreedPanorama()">3D全景</button>
+	<div class="handleBtn">
+		<button ion-button round outline (click)="selectMultipleImgs('threeD')">图片+</button>
+  	<button ion-button round outline (click)="gotoThreedPanorama()">3D全景</button>
+	</div>
+	<img src="{{testURL}}">
 </ion-content>

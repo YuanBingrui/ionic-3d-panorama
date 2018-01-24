@@ -12,6 +12,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { PhotoLibrary } from '@ionic-native/photo-library';
+import { Camera } from '@ionic-native/camera';
+import { ImagePicker } from '@ionic-native/image-picker';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { PhotoLibrary } from '@ionic-native/photo-library';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AndroidPermissions,
-    PhotoLibrary
+    PhotoLibrary,
+    Camera,
+    ImagePicker
   ]
 })
 export class AppModule {}

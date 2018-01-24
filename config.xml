@@ -87,4 +87,7 @@
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="To choose photos" />
     </plugin>
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
+    <plugin name="com.synconset.imagepicker" spec="~2.1.8">
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="May I open your album" />
+    </plugin>
 </widget>

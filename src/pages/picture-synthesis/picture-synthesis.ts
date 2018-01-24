@@ -1,5 +1,7 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, AlertController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, AlertController, NavParams, Platform } from 'ionic-angular';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { PhotoLibrary } from '@ionic-native/photo-library';
 
 @Component({
   selector: 'page-picture-synthesis',
@@ -10,16 +12,19 @@ export class PictureSynthesisPage {
 
 	imgUrl: string;
 	puzzleImg: Array<string> = [];
+
   constructor(
   	public navCtrl: NavController,
   	public alertCtrl: AlertController,
-    public navParams: NavParams
+    public navParams: NavParams,
+    public platform: Platform,
+    public androidPermissions: AndroidPermissions,
+    public photoLibrary: PhotoLibrary
   ) {
     this.puzzleImg = this.navParams.data;
   }
 
   ionViewWillEnter() {
-    console.log(this.puzzleImg);
     console.log('ionViewDidLoad PictureSynthesisPage');
   }
 
@@ -27,22 +32,60 @@ export class PictureSynthesisPage {
   	this.imgUrl = this.pictureCom.saveImageInfo();
   }
 
-  downloadImg(){
-  	if(this.imgUrl){
-  		let image = this.imgUrl.replace("image/png", "image/octet-stream");
-  		let save_link = <HTMLElement>document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-    	save_link.href = image;
-    	save_link.download = 'elevater.png';
-    	let event = document.createEvent('MouseEvents');
-    	event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
-    	save_link.dispatchEvent(event);
-  	}else{
-  		let alert = this.alertCtrl.create({
-        message: '还没有生成图片，请先生成！！！',
-        buttons: ['确定']
-      });
-      alert.present();
-  	}
-  	
+  saveImgToAlbum(){
+    if(this.imgUrl){
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then((result)=>{
+        if(!result.hasPermission) {
+          let alert = this.alertCtrl.create({
+            message: '是否允许访问相册？',
+            buttons: [
+              {
+                text: '取消'
+              },
+              {
+                text: '同意',
+                handler: () => {
+                  this.getPermission();
+                }
+              }
+            ]
+          });
+          alert.present();
+        }else{
+          this.saveImg();
+        }
+      })
+    }else{
+      this.tipsInfo('请先合成图片');
+    }
   }
+
+  getPermission(){
+    this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then((hasPermission)=>{
+      if(hasPermission){
+        this.saveImg();
+      }else{
+        this.tipsInfo('无法访问本地相册，请开放访问权限');
+      }
+    }).catch(err=>{
+      this.tipsInfo('无法访问本地相册，请开放访问权限');
+    });
+  }
+
+  saveImg(){
+    this.photoLibrary.saveImage(this.imgUrl,'elevator').then((res)=>{
+      this.tipsInfo('图片已保存到相册');
+    }).catch(e=>{
+      this.tipsInfo('图片保存错误，请重新保存');
+    });
+  }
+
+  tipsInfo(message){
+    let alert = this.alertCtrl.create({
+      message: message,
+      buttons: ['确定']
+    });
+    alert.present();
+  }
+  
 }

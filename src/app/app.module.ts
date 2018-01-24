@@ -4,19 +4,19 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { ComponentsModule } from '../components/components.module';
 
-import { TabsPage } from '../pages/tabs/tabs';
 import { HomePage } from '../pages/home/home';
 import { PictureSynthesisPage } from '../pages/picture-synthesis/picture-synthesis';
 import { ThreedPanoramaPage } from '../pages/threed-panorama/threed-panorama';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { PhotoLibrary } from '@ionic-native/photo-library';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    TabsPage,
     PictureSynthesisPage,
     ThreedPanoramaPage
   ],
@@ -29,14 +29,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   entryComponents: [
     MyApp,
     HomePage,
-    TabsPage,
     PictureSynthesisPage,
     ThreedPanoramaPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AndroidPermissions,
+    PhotoLibrary
   ]
 })
 export class AppModule {}
